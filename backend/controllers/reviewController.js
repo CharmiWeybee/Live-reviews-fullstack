@@ -1,11 +1,12 @@
 const asyncHandler = require("express-async-handler");
 const Review = require("../models/reviewModel");
+
 //@desc Get all reviews
 //@route GET /api/reviews
 const getReviews = asyncHandler(async (req, res) => {
   console.log("The request body is :");
-  const reviews = await Review.find({});
-  console.log(reviews)
+  const reviews = await Review.find({}).sort([['updatedAt', -1]]);
+  console.log(reviews);
   res.status(200).json(reviews);
 });
 
@@ -23,7 +24,8 @@ const createReview = asyncHandler(async (req, res) => {
     content
   });
 
-  // io.emit('reviewAdded', review);
+  // Emit a 'reviewAdded' event using socket.io after successfully adding a review
+  req.io.emit('reviewAdded', review);
 
   res.status(201).json(review);
 });
@@ -42,7 +44,10 @@ const getReview = asyncHandler(async (req, res) => {
 //@desc Update review
 //@route PUT /api/reviews/:id
 const updateReview = asyncHandler(async (req, res) => {
-  const review = await Review.findById(req.params.id);l
+  console.log("The updateReview request body is :");
+  console.log("req.params.id", req.params.id);
+  const review = await Review.findById(req.params.id);
+  console.log("review", review);
   if (!review) {
     res.status(404);
     throw new Error("review not found");
@@ -53,6 +58,9 @@ const updateReview = asyncHandler(async (req, res) => {
     req.body,
     { new: true }
   );
+
+  // Emit a 'reviewUpdated' event using socket.io after successfully updating a review
+  req.io.emit('reviewUpdated', updatedreview);
 
   res.status(200).json(updatedreview);
 });
@@ -67,6 +75,10 @@ const deleteReview = asyncHandler(async (req, res) => {
   }
 
   await Review.deleteOne({ _id: req.params.id });
+
+  // Emit a 'reviewDeleted' event using socket.io after successfully deleting a review
+  req.io.emit('reviewDeleted', req.params.id);
+
   res.status(200).json(review);
 });
 
