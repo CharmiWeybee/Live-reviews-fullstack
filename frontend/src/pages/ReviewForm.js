@@ -45,10 +45,11 @@ const ReviewForm = ({getReviewsById, addReviews, updateReviews, dataRes} ) => {
   return (
     <div>
         <div className="container">
+<h2>Add Review</h2>
   <form>
     <div className="row">
       <div className="col-25">
-        <label for="fname">Title</label>
+        <label >Title</label>
       </div>
       <div className="col-75">
         <input type="text" name="title" placeholder="Enter Title.." value={data.title} onChange={(e) => handleChange("title", e.target.value)} />
@@ -56,7 +57,7 @@ const ReviewForm = ({getReviewsById, addReviews, updateReviews, dataRes} ) => {
     </div>
     <div className="row">
       <div className="col-25">
-        <label for="content">Content</label>
+        <label>Content</label>
       </div>
       <div className="col-75">
         <textarea id="content" name="content" placeholder="Write something" value={data.content} onChange={(e) => handleChange("content", e.target.value)}></textarea>

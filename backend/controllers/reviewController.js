@@ -1,7 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Review = require("../models/reviewModel");
 
-//@desc Get all reviews
 //@route GET /api/reviews
 const getReviews = asyncHandler(async (req, res) => {
   console.log("The request body is :");
@@ -10,7 +9,6 @@ const getReviews = asyncHandler(async (req, res) => {
   res.status(200).json(reviews);
 });
 
-//@desc Create New review
 //@route POST /api/reviews
 const createReview = asyncHandler(async (req, res) => {
   console.log("The request body is :", req.body);
@@ -30,7 +28,6 @@ const createReview = asyncHandler(async (req, res) => {
   res.status(201).json(review);
 });
 
-//@desc Get review
 //@route GET /api/reviews/:id
 const getReview = asyncHandler(async (req, res) => {
   const review = await Review.findById(req.params.id);
@@ -41,7 +38,6 @@ const getReview = asyncHandler(async (req, res) => {
   res.status(200).json(review);
 });
 
-//@desc Update review
 //@route PUT /api/reviews/:id
 const updateReview = asyncHandler(async (req, res) => {
   console.log("The updateReview request body is :");
@@ -65,7 +61,6 @@ const updateReview = asyncHandler(async (req, res) => {
   res.status(200).json(updatedreview);
 });
 
-//@desc Delete review
 //@route DELETE /api/reviews/:id
 const deleteReview = asyncHandler(async (req, res) => {
   const review = await Review.findById(req.params.id);

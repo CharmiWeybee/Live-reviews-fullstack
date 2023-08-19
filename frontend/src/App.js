@@ -1,13 +1,37 @@
 import { Route, Routes } from 'react-router-dom';
-import { Provider } from "react-redux";
-import './App.css';
-import store from './redux/store';
-import Reviews from './components/Reviews';
-import ReviewForm from './components/ReviewForm';
+import {  connect } from "react-redux";
+import io from 'socket.io-client';
 
-function App() {
+import './App.css';
+import { useEffect } from 'react';
+import { fetchAllReviews } from './redux/actions';
+import Reviews from './pages/Reviews';
+import ReviewForm from './pages/ReviewForm';
+
+const socket = io('http://localhost:5001/');
+function App({fetchreviews}) {
+   useEffect(() => {
+    socket.on('reviewAdded', (newReview) => {
+      fetchreviews()
+    });
+
+    socket.on('reviewUpdated', (updatedReview) => {
+      fetchreviews()
+    });
+
+    socket.on('reviewDeleted', (reviewId) => {
+      fetchreviews()
+    });
+
+    return () => {
+      socket.off('reviewAdded');
+      socket.off('reviewUpdated');
+      socket.off('reviewDeleted');
+    };
+  }, []);
+
   return (
-    <Provider store={store}>
+
     <div className="App">
       <Routes>
         <Route path="/" element={ <Reviews/> } />
@@ -15,8 +39,14 @@ function App() {
         <Route path="/:id" element={ <ReviewForm/> } />
       </Routes>
     </div>
-    </Provider>
   );
 }
 
-export default App;
+const mapDispatchToProps = (dispatch) => {
+	return {
+		fetchreviews: () =>
+			dispatch(fetchAllReviews())
+	};
+};
+
+export default connect(null, mapDispatchToProps)(App);

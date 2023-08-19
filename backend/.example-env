@@ -1,0 +1,2 @@
+PORT=5001
+CONNECTION_STRING=mongodb+srv://username:password@cluster0.s3gurpn.mongodb.net/LiveReview?retryWrites=true&w=majority

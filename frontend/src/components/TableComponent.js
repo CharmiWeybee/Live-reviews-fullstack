@@ -1,13 +1,15 @@
 import React, { useState, useMemo } from "react";
 import { useTable, useSortBy, useFilters } from "react-table";
 import "../style.css";
+import { useNavigate } from "react-router";
+import { convertToDesiredFormat } from "../helpers/helperFunctions";
 
 const TableComponent = ({ data, onEdit, onDelete }) => {
   const columns = useMemo(
     () => [
       {
         Header: "#",
-        accessor: "id",
+        accessor: "_id",
       },
       {
         Header: "Title",
@@ -20,6 +22,7 @@ const TableComponent = ({ data, onEdit, onDelete }) => {
       {
         Header: "Date-time",
         accessor: "updatedAt",
+        Cell: ({ value }) => convertToDesiredFormat(value)
       },
       {
         Header: "Edit",
@@ -54,6 +57,7 @@ const TableComponent = ({ data, onEdit, onDelete }) => {
   );
 
   const [filterInput, setFilterInput] = useState("");
+  const navigate = useNavigate();
 
   const handleFilterChange = (e) => {
     const value = e.target.value || undefined;
@@ -63,12 +67,15 @@ const TableComponent = ({ data, onEdit, onDelete }) => {
 
   return (
     <div>
+    <div className="list-header">
       <input
         className="search-input"
         value={filterInput}
         onChange={handleFilterChange}
         placeholder={"Search by title"}
       />
+    <button onClick={() => navigate("/new")}>New Review</button>
+    </div>
       <table {...getTableProps()} className="table">
         <thead>
           {headerGroups.map((headerGroup) => (
